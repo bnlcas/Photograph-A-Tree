@@ -1,0 +1,29 @@
+.main {
+    position: relative;
+    height: 100vh;
+    width: 90%;
+    margin: 5px;
+    padding: 25px;
+    font-family: 'Cormorant Garamond', Garamond, Times, serif;
+    font-weight: lighter;
+    font-size: 18;
+}
+
+.column {
+    float: left;
+    width: 30.0%;
+    padding: 5px;
+  }
+  
+  /* Clearfix (clear floats) */
+  .row::after {
+    content: "";
+    clear: both;
+    display: table;
+  }
+
+p
+{
+    width: 80%;
+}
+
