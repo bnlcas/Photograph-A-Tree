@@ -22,22 +22,16 @@ const image2video = async () => {
   const video = document.getElementById('output-video');
   video.src = URL.createObjectURL(new Blob([data.buffer], { type: 'video/mp4' }));
 }
-const elm = document.getElementById('start-btn');
-elm.addEventListener('click', image2video);
-
-//asdf//asdf//asdf//asdf//asdf//asdf//asdf//asdf//asdf//asdf
-//asdf//asdf//asdf//asdf//asdf//asdf//asdf//asdf//asdf//asdf
-//asdf//asdf//asdf//asdf//asdf//asdf//asdf//asdf//asdf//asdf
-//asdf//asdf//asdf//asdf//asdf//asdf//asdf//asdf//asdf//asdf
-//asdf//asdf//asdf//asdf//asdf//asdf//asdf//asdf//asdf//asdf
 
 
-var totalfiles;
-function UploadFiles()
-{
-    var totalfiles = document.getElementById('files').files.length;
+//asdf//asdf//asdf//asdf//asdf//asdf//asdf//asdf//asdf//asdf
+//asdf//asdf//asdf//asdf//asdf//asdf//asdf//asdf//asdf//asdf
+//asdf//asdf//asdf//asdf//asdf//asdf//asdf//asdf//asdf//asdf
+//asdf//asdf//asdf//asdf//asdf//asdf//asdf//asdf//asdf//asdf
+//asdf//asdf//asdf//asdf//asdf//asdf//asdf//asdf//asdf//asdf
 
-}
+
+
 
 function DrawFrame(ind)
 {
@@ -52,15 +46,29 @@ function UpdatePreview()
     DrawFrame(frameNum);
 }
 
-var img_urls = [];
-var images = [];
-var AddImageFiles = async ({target: { files } }) => {
-    files = [].slice.call(files).sort(function(a, b){
+function SortFiles(files)
+{
+    return [].slice.call(files).sort(function(a, b){
         if(a.name < b.name) { return -1; }
         if(a.name > b.name) { return 1; }
         return 0;
-    })
+    });
+}
 
+function AddPlaybackControls()
+{
+    addControls = false;
+
+    document.getElementById("playbackControls").style.visibility = 'visible';
+    document.getElementById("playbackControls").style.pointerEvents = 'auto';
+
+    document.getElementById("add_button").style.visibility = 'visible';
+    document.getElementById("add_button").style.pointerEvents = 'auto';
+
+}
+
+function CreateImages(files)
+{
     for(var i = 0; i < files.length; i++)
     {   
         let src_url = URL.createObjectURL(files[i]);
@@ -74,22 +82,31 @@ var AddImageFiles = async ({target: { files } }) => {
     };
 }
 
+var UploadImageFiles = async ({target: { files } }) => {
+    img_urls = [];
+    images = [];
+    files = SortFiles(files);
+    CreateImages(files);
+    if(addControls)
+    {
+        AddPlaybackControls();
+    }
+}
+
+var AddImageFiles = async ({target: { files } }) => {
+    files = SortFiles(files);
+    CreateImages(files);
+}
 
 
 function TogglePlay()
 {
     isPlaying = !isPlaying;
+    document.getElementById("playButton").value = isPlaying ? 'Pause' : 'Play ';
     if(isPlaying)
     {
-        if(frameNum == img_urls.length - 1)
-        {
-            frameNum = 0;
-        }
+        frameNum = 0;
         setTimeout(AdvanceFrame, frameDuration);
-    }
-    else
-    {
-
     }
 }
 
@@ -121,11 +138,6 @@ function AdvanceFrame()
 
 //document.getElementById('uploadButton').addEventListener('onclick',UploadFiles );
 
-
-
-document.getElementById('image_uploader').addEventListener('change', AddImageFiles);
-
-
 const canvas = document.getElementById("previewCanvas");
 const ctx = canvas.getContext("2d");
 canvas.addEventListener("click", TogglePlay);
@@ -135,4 +147,27 @@ var loopClip = false;
 
 var isPlaying = false;
 var frameNum = 0;
+var addControls = true;
+
+var img_urls = [];
+var images = [];
+
+
+
+document.getElementById('upload_button').addEventListener('click', 
+    () => document.getElementById('image_uploader').click());
+document.getElementById('image_uploader').addEventListener('change', UploadImageFiles);
+
+
+
+document.getElementById('add_button').addEventListener('click', 
+    () => document.getElementById('image_appended').click());
+document.getElementById('image_appended').addEventListener('change', AddImageFiles);
+
+//document.getElementById("loopPlayback").addEventListener("change", ()=>{loopClip = document.getElementById("loopPlayback").checked;})
+document.getElementById("loopPlayback").addEventListener("change", (e)=>{loopClip = e.target.checked;});
+document.getElementById("loopPlayback").addEventListener("change", (e)=>{loopClip = e.target.checked;});
+document.getElementById("FrameTime").addEventListener("change", (e)=>{frameDuration = 1000 * parseFloat(e.target.value); console.log(frameDuration);});
+document.getElementById("playButton").addEventListener("click", TogglePlay);
+
 

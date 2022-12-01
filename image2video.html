@@ -1,30 +1,35 @@
 <html>
   <head>
     <link rel="icon" type="image/x-icon" href="./Assets/favicon.ico">
-    <style>
-      html, body {
-        margin: 0;
-        width: 100%;
-        height: 100%
-      }
-      body {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-      }
-    </style>
+    <link rel="stylesheet" href='./css/style.css'>
   </head>
   <body>
     <h3>Upload Files To Make a Timelapse Video</h3>
 
-    <form id="uploadButtons">
-        <input type="file"  id="image_uploader" name="name" accept="image/*" multiple><br><br>
-        <!--
-        <input type="button" id="uploadButton" value="Upload Images">
-    -->
-    </form>
+    <div class="uploadControls">
+        <form id="uploadButtons">
+            <input type="file" style="display:none;" id="image_uploader" name="name" accept="image/*" multiple><br><br>
+            <input type="button" id="upload_button" value="Choose Files">
+        
+            <!--<input type="button" id="uploadButton" value="Upload Images">-->
+            <input type="file" style="display:none;" id="image_appended" name="name" accept="image/*" multiple><br><br>
+            <input type="button" id="add_button" value="Add Files">
+        </form>
+    </div>
 
      <canvas id="previewCanvas"></canvas>
+
+     <div class="playbackControls" id="playbackControls">
+        <input type="button" id="playButton" value="Play ">
+        <label for="StartTime">
+          Seconds Per Photo:
+          <input type="range" id="FrameTime" min="0.0333" max="2.0" value=".0333" step="0.016666">
+        </label>
+        <label for="loopPlayback"> Loop Playback? </label>
+        <input type="checkbox" id="loopPlayback" name="loop"></input>
+        <br>
+        <input type="button" id="exportButton" value="Export">
+    </div>
     
     <script src="./js/ffmpeg.min.js"></script>
     <script src="./js/image2video.js"></script>
