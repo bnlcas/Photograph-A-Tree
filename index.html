@@ -60,6 +60,17 @@
         <p id="message"></p>
         <a href="./assets/triangle">Data Set</a>
     </div>
+    <script>
+        const example_video = document.getElementById("example_video");
+        example_video.addEventListener('ended', (event) => {
+            setTimeout(() => {
+                example_video.currentTime = 0;
+                setTimeout(() => {
+                    example_video.play();
+                }, 800);
+            }, 1000);
+        });
+    </script>
     <script src="./js/ffmpeg.min.js"></script>
     <script src="./js/image2video.js"></script>
   </body>
