@@ -50,7 +50,10 @@ const CreateGIF = async () =>{
     }
   
     message.innerHTML = 'Start transcoding';
-    await ffmpeg.run('-framerate', '5', '-pattern_type', 'glob', '-i', '*.png', 'out.gif');
+    let max_width = 512;
+    let scaled_width = (images[0].width > max_width) ? max_width : images[0].width;
+    let filterCommand = "scale=" + scaled_width.toString() + ":-1";
+    await ffmpeg.run('-framerate', '5', '-pattern_type', 'glob', '-i', '*.png', '-vf', filterCommand, 'out.gif');
     const data = ffmpeg.FS('readFile', 'out.gif');
     
     for (let i = 0; i < img_urls.length; i += 1) {
