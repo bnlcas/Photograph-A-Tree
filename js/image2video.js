@@ -6,9 +6,13 @@ const ffmpeg = createFFmpeg({ log: true });
 
  const CreateVideo = async () => {
     const message = document.getElementById('VideoProcessingMessage');
-    message.innerHTML = 'Loading ffmpeg-core.js';
-    await ffmpeg.load();
+    if(!ffmpeg.isLoaded())
+    {
+        message.innerHTML = 'Loading ffmpeg-core.js';
+        await ffmpeg.load();
+    }
     message.innerHTML = 'Loading data';
+
 
     for (let i = 0; i < img_urls.length; i += 1) {
         const frame_filename = 'tmp' + i.toString().padStart(4, '0') + ".png";
@@ -16,8 +20,9 @@ const ffmpeg = createFFmpeg({ log: true });
     }
     
     message.innerHTML = 'Start transcoding';
+    let frameRate = Math.ceil(1000/frameDuration).toString();
     //await ffmpeg.run('-framerate', '10', '-pattern_type', 'glob', '-i', '*.png', 'copy', '-shortest', '-c:v', 'libx264', '-pix_fmt', 'yuv420p', 'out.mp4');
-    await ffmpeg.run('-framerate', '30', '-pattern_type', 'glob', '-i', '*.png', '-c:v', 'libx264', '-pix_fmt', 'yuv420p', 'out.mp4');
+    await ffmpeg.run('-framerate', frameRate, '-pattern_type', 'glob', '-i', '*.png', '-c:v', 'libx264', '-pix_fmt', 'yuv420p', 'out.mp4');
     //await ffmpeg.run('-framerate', '30', '-pattern_type', 'glob', '-i', '*.png', 'out.mp4');
     const data = ffmpeg.FS('readFile', 'out.mp4');
 
@@ -40,8 +45,11 @@ const ffmpeg = createFFmpeg({ log: true });
 
 const CreateGIF = async () =>{
     const message = document.getElementById('VideoProcessingMessage');
-    message.innerHTML = 'Loading ffmpeg-core.js';
-    await ffmpeg.load();
+    if(!ffmpeg.isLoaded())
+    {
+        message.innerHTML = 'Loading ffmpeg-core.js';
+        await ffmpeg.load();
+    }
     message.innerHTML = 'Loading data';
 
     for (let i = 0; i < img_urls.length; i += 1) {
@@ -50,10 +58,12 @@ const CreateGIF = async () =>{
     }
   
     message.innerHTML = 'Start transcoding';
+
+    let frameRate = Math.ceil(1000/frameDuration).toString();
     let max_width = 512;
     let scaled_width = (images[0].width > max_width) ? max_width : images[0].width;
     let filterCommand = "scale=" + scaled_width.toString() + ":-1";
-    await ffmpeg.run('-framerate', '5', '-pattern_type', 'glob', '-i', '*.png', '-vf', filterCommand, 'out.gif');
+    await ffmpeg.run('-framerate', frameRate, '-pattern_type', 'glob', '-i', '*.png', '-vf', filterCommand, 'out.gif');
     const data = ffmpeg.FS('readFile', 'out.gif');
     
     for (let i = 0; i < img_urls.length; i += 1) {
@@ -191,7 +201,7 @@ const canvas = document.getElementById("previewCanvas");
 const ctx = canvas.getContext("2d");
 canvas.addEventListener("click", TogglePlay);
 
-var frameDuration = 500;
+var frameDuration = 32;
 var loopClip = false;
 
 var isPlaying = false;
