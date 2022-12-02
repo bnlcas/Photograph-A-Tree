@@ -4,6 +4,11 @@
 const { createFFmpeg, fetchFile } = FFmpeg;
 const ffmpeg = createFFmpeg({ log: true });
 
+ffmpeg.setProgress(({ ratio }) => {
+    const progressBar = document.getElementById("ProgressSlider");
+    progressBar.value = ratio;
+});
+
  const CreateVideo = async () => {
     const message = document.getElementById('VideoProcessingMessage');
     if(!ffmpeg.isLoaded())

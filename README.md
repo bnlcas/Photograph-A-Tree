@@ -6,4 +6,5 @@ This repository contains code for a website to help you get started photographin
 
 It uses [ffmpeg.wasm](https://github.com/ffmpegwasm/ffmpeg.wasm) to convert images into videos. Currently this only runs in Chrome and Firefox for the time being.
 
+This project was initially made while at [Recurse Center](https://www.recurse.com) Fall 2, 2022.
 ![image](./Assets/tree_img.jpg)
