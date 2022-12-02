@@ -5,30 +5,31 @@
   </head>
   <body>
     <h3>Upload Files To Make a Timelapse Video</h3>
-
     <div class="uploadControls">
-        <form id="uploadButtons">
-            <input type="file" style="display:none;" id="image_uploader" name="name" accept="image/*" multiple><br><br>
-            <input type="button" id="upload_button" value="Choose Files">
-        
-            <!--<input type="button" id="uploadButton" value="Upload Images">-->
-            <input type="file" style="display:none;" id="image_appended" name="name" accept="image/*" multiple><br><br>
-            <input type="button" id="add_button" value="Add Files">
-        </form>
-    </div>
+            <input type="file" style="display:none;" id="image_uploader" name="name" accept="image/*" multiple>
+            <input type="button" id="upload_button" value="Upload Image Files">
 
+            <!--<input type="button" id="uploadButton" value="Upload Images">-->
+            <input type="file" style="display:none;" id="image_appended" name="name" accept="image/*" multiple>
+            <input type="button" id="add_button" value="Add More Files">
+    </div>
+    <br>
      <canvas id="previewCanvas"></canvas>
 
      <div class="playbackControls" id="playbackControls">
         <input type="button" id="playButton" value="Play ">
-        <label for="StartTime">
-          Seconds Per Photo:
-          <input type="range" id="FrameTime" min="0.0333" max="2.0" value=".0333" step="0.016666">
+        <label for="FrameTime">
+          Seconds Per Photo: 0.03
         </label>
+          <input type="range" id="FrameTime" min="0.0333" max="2.0" value=".0333" step="0.016666">
+
         <label for="loopPlayback"> Loop Playback? </label>
         <input type="checkbox" id="loopPlayback" name="loop"></input>
-        <br>
-        <input type="button" id="exportButton" value="Export">
+        <br><br>
+        <input type="button" id="exportButton" value="Export Video">
+        <input type="button" id="exportGIFButton" value="Export GIF">
+        <p id="VideoProcessingMessage"></p>
+
     </div>
     
     <script src="./js/ffmpeg.min.js"></script>

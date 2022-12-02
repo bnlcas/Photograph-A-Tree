@@ -13,7 +13,7 @@ body {
     position: relative;
     height: 100vh;
     width: 90%;
-    margin: 5px;
+    margin: 0px;
     padding: 25px;
     font-family: 'Cormorant Garamond', Garamond, Times, serif;
     font-weight: lighter;
@@ -21,9 +21,14 @@ body {
 }
 
 .playbackControls{
+  display: inline-block;
   pointer-events: none;
   visibility: hidden;
 } 
+
+.uploadControls {
+  display: inline-block;
+}
 
 #add_button{
   pointer-events: none;
@@ -49,3 +54,7 @@ p
     width: 80%;
 }
 
+br
+{
+  line-height: 150%;
+}
