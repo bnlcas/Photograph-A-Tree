@@ -5,13 +5,9 @@
   </head>
   <body>
     <h3>Upload Files To Make a Timelapse Video</h3>
-    <div class="uploadControls">
+    <div class="uploadControls" id="UploadDiv">
             <input type="file" style="display:none;" id="image_uploader" name="name" accept="image/*" multiple>
             <input type="button" id="upload_button" value="Upload Image Files">
-
-            <!--<input type="button" id="uploadButton" value="Upload Images">-->
-            <input type="file" style="display:none;" id="image_appended" name="name" accept="image/*" multiple>
-            <input type="button" id="add_button" value="Add More Files">
     </div>
     <br>
      <canvas id="previewCanvas"></canvas>
@@ -30,6 +26,11 @@
         <input type="button" id="exportGIFButton" value="Export GIF">
         <p id="VideoProcessingMessage"></p>
 
+    </div>
+
+    <div class="hiddenInputButtons">
+        <input type="file" style="display:none;" id="image_appended" name="name" accept="image/*" multiple>
+        <input type="button" id="add_button" value="Add More Image Files to Sequence">
     </div>
     
     <script src="./js/ffmpeg.min.js"></script>

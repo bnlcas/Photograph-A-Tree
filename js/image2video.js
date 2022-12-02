@@ -107,10 +107,16 @@ function AddPlaybackControls()
     document.getElementById("playbackControls").style.visibility = 'visible';
     document.getElementById("playbackControls").style.pointerEvents = 'auto';
 
-    document.getElementById("add_button").style.visibility = 'visible';
-    document.getElementById("add_button").style.pointerEvents = 'auto';
-
+    ShiftAddMoreFilesButton();
     document.getElementById("upload_button").value="Upload A Different Set of Image Files"
+}
+
+function ShiftAddMoreFilesButton()
+{
+    const addMoreFilesButton = document.getElementById('add_button');
+    const addMoreFilesInput = document.getElementById('image_appended');
+    document.getElementById("UploadDiv").appendChild(addMoreFilesInput);
+    document.getElementById("UploadDiv").appendChild(addMoreFilesButton);
 }
 
 function CreateImages(files)

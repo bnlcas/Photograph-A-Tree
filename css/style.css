@@ -30,11 +30,10 @@ body {
   display: inline-block;
 }
 
-#add_button{
+.hiddenInputButtons{
   pointer-events: none;
   visibility: hidden;
 }
-
 
 .column {
     float: left;
