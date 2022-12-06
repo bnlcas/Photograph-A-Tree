@@ -91,9 +91,13 @@ const CreateGIF = async () =>{
 //
 function DrawFrame(ind)
 {
-    canvas.width = images[ind].width;
-    canvas.height = images[ind].height;
-    ctx.drawImage(images[ind], 0, 0,images[ind].width, images[ind].height );
+    let displayAspect = window.innerWidth / window.innerHeight;
+    let imageAspect = images[ind].width / images[ind].height;
+    let canvasYScale = Math.min(0.9 * displayAspect, 0.7);
+    
+    canvas.height = parseInt(canvasYScale * window.innerHeight);
+    canvas.width = parseInt(canvas.height * imageAspect);
+    ctx.drawImage(images[ind], 0, 0,images[ind].width, images[ind].height, 0, 0, canvas.width, canvas.height);
 }
 
 function UpdatePreview()
