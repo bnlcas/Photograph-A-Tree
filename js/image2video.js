@@ -94,7 +94,7 @@ function DrawFrame(ind)
     let displayAspect = window.innerWidth / window.innerHeight;
     let imageAspect = images[ind].width / images[ind].height;
     let canvasYScale = Math.min(0.9 * displayAspect, 0.7);
-    
+
     canvas.height = parseInt(canvasYScale * window.innerHeight);
     canvas.width = parseInt(canvas.height * imageAspect);
     ctx.drawImage(images[ind], 0, 0,images[ind].width, images[ind].height, 0, 0, canvas.width, canvas.height);
@@ -210,8 +210,8 @@ const canvas = document.getElementById("previewCanvas");
 const ctx = canvas.getContext("2d");
 canvas.addEventListener("click", TogglePlay);
 
-var frameDuration = 32;
-var loopClip = false;
+var frameDuration = 250;
+var loopClip = true;
 
 var isPlaying = false;
 var frameNum = 0;

@@ -51,9 +51,32 @@ body {
 p
 {
     width: 80%;
+    padding: 0px;
+    margin: 0px;
 }
 
 br
 {
-  line-height: 150%;
+  line-height: 120%;
+}
+
+#example_video {
+  height: 60%;
+  display: block;
+}
+
+/* Flex Container*/
+.flex-container {
+  padding: 0px 0px 0;
+  width: 80%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: start;
+}
+
+.flex-left {
+  width: 360px;
+}
+.flex-right{
+  width: 30vw;
 }
