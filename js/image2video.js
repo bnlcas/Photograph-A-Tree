@@ -18,22 +18,38 @@ ffmpeg.setProgress(({ ratio }) => {
     }
     message.innerHTML = 'Loading data';
 
+    const targetEncoding = Mode(img_extensions);
+
 
     for (let i = 0; i < img_urls.length; i += 1) {
-        const frame_filename = 'tmp' + i.toString().padStart(4, '0') + ".png";
+        const frame_filename = 'tmp' + i.toString().padStart(4, '0') + "." + img_extensions[i];
         ffmpeg.FS('writeFile', frame_filename, await fetchFile(img_urls[i]));
+    }
+    
+    for (let i = 0; i < img_urls.length; i += 1) {
+        if(img_extensions[i] != targetEncoding)
+        {
+            const frame_filename_in = 'tmp' + i.toString().padStart(4, '0') + "." + img_extensions[i];
+            const frame_filename_out = 'tmp' + i.toString().padStart(4, '0') + "." + targetEncoding;
+            await ffmpeg.run('-i', frame_filename_in, frame_filename_out)
+        }
     }
     
     message.innerHTML = 'Start transcoding';
     let frameRate = Math.ceil(1000/frameDuration).toString();
     //await ffmpeg.run('-framerate', '10', '-pattern_type', 'glob', '-i', '*.png', 'copy', '-shortest', '-c:v', 'libx264', '-pix_fmt', 'yuv420p', 'out.mp4');
-    await ffmpeg.run('-framerate', frameRate, '-pattern_type', 'glob', '-i', '*.png', '-c:v', 'libx264', '-pix_fmt', 'yuv420p', 'out.mp4');
+    await ffmpeg.run('-framerate', frameRate, '-pattern_type', 'glob', '-i', '*.' + targetEncoding, '-c:v', 'libx264', '-pix_fmt', 'yuv420p', 'out.mp4');
     //await ffmpeg.run('-framerate', '30', '-pattern_type', 'glob', '-i', '*.png', 'out.mp4');
     const data = ffmpeg.FS('readFile', 'out.mp4');
 
     for (let i = 0; i < img_urls.length; i += 1) {
-        const frame_filename = 'tmp' + i.toString().padStart(4, '0') + ".png";
+        const frame_filename = 'tmp' + i.toString().padStart(4, '0') + "." + img_extensions[i];
         ffmpeg.FS('unlink', frame_filename);
+        if(img_extensions[i] != targetEncoding)
+        {
+            const reencoded_filename = 'tmp' + i.toString().padStart(4, '0') + "." + targetEncoding;
+            ffmpeg.FS('unlink', reencoded_filename);
+        }
     }
 
     let video_src = URL.createObjectURL(new Blob([data.buffer], { type: 'video/mp4' }));
@@ -48,6 +64,12 @@ ffmpeg.setProgress(({ ratio }) => {
     message.innerHTML = 'Done!';
   }
 
+const Mode = (inputArray) =>
+inputArray.reduce(
+    (a,b,i,arr)=>
+     (arr.filter(v=>v===a).length>=arr.filter(v=>v===b).length?a:b),
+    null)
+
 const CreateGIF = async () =>{
     const message = document.getElementById('VideoProcessingMessage');
     if(!ffmpeg.isLoaded())
@@ -58,22 +80,40 @@ const CreateGIF = async () =>{
     message.innerHTML = 'Loading data';
 
     for (let i = 0; i < img_urls.length; i += 1) {
-      const frame_filename = 'tmp' + i.toString().padStart(4, '0') + ".png";
+      const frame_filename = 'tmp' + i.toString().padStart(4, '0') + "." + img_extensions[i];
       ffmpeg.FS('writeFile', frame_filename, await fetchFile(img_urls[i]));
     }
-  
+    console.log('images written')
+    
+    const targetEncoding = Mode(img_extensions);
+    
+    for (let i = 0; i < img_urls.length; i += 1) {
+        if(img_extensions[i] != targetEncoding)
+        {
+            const frame_filename_in = 'tmp' + i.toString().padStart(4, '0') + "." + img_extensions[i];
+            const frame_filename_out = 'tmp' + i.toString().padStart(4, '0') + "." + targetEncoding;
+            await ffmpeg.run('-i', frame_filename_in, frame_filename_out)
+        }
+    }
+    
     message.innerHTML = 'Start transcoding';
 
     let frameRate = Math.ceil(1000/frameDuration).toString();
     let max_width = 512;
     let scaled_width = (images[0].width > max_width) ? max_width : images[0].width;
     let filterCommand = "scale=" + scaled_width.toString() + ":-1";
-    await ffmpeg.run('-framerate', frameRate, '-pattern_type', 'glob', '-i', '*.png', '-vf', filterCommand, 'out.gif');
+    await ffmpeg.run('-framerate', frameRate, '-pattern_type', 'glob', '-i', '*.' + targetEncoding, '-vf', filterCommand, 'out.gif');
+
     const data = ffmpeg.FS('readFile', 'out.gif');
     
     for (let i = 0; i < img_urls.length; i += 1) {
-        const frame_filename = 'tmp' + i.toString().padStart(4, '0') + ".png";
+        const frame_filename = 'tmp' + i.toString().padStart(4, '0') + "." + img_extensions[i];
         ffmpeg.FS('unlink', frame_filename);
+        if(img_extensions[i] != targetEncoding)
+        {
+            const reencoded_filename = 'tmp' + i.toString().padStart(4, '0') + "." + targetEncoding;
+            ffmpeg.FS('unlink', reencoded_filename);
+        }
     }
   
     let gif_src = URL.createObjectURL(new Blob([data.buffer], { type: 'image/gif' }));
@@ -145,7 +185,13 @@ function CreateImages(files)
 {
     for(var i = 0; i < files.length; i++)
     {   
+        //console.log(files[i])
         let src_url = URL.createObjectURL(files[i]);
+
+        let extension = files[i]['name'].split('.')[1].toLowerCase();
+        extension = (extension == "jpeg") ? "jpg" : extension;
+        
+        img_extensions.push(extension);
         img_urls.push(src_url);
         let img = new Image();
         img.src = src_url;
@@ -158,6 +204,7 @@ function CreateImages(files)
 
 var UploadImageFiles = async ({target: { files } }) => {
     img_urls = [];
+    img_extensions = [];
     images = [];
     files = SortFiles(files);
     CreateImages(files);
@@ -218,6 +265,7 @@ var frameNum = 0;
 var addControls = true;
 
 var img_urls = [];
+var img_extensions = [];
 var images = [];
 
 
