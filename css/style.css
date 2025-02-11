@@ -55,6 +55,18 @@ p
     margin: 0px;
 }
 
+img
+{
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+video
+{
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
 br
 {
   line-height: 120%;
